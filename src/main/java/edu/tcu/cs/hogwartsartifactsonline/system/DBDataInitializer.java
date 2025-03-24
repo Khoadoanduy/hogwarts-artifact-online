@@ -1,66 +1,84 @@
 package edu.tcu.cs.hogwartsartifactsonline.system;
 
-/**
- * This class defines the schema of the response. It is used to encapsulate data prepared by
- * the server side, this object will be serialized to JSON before sent back to the client end.
- */
-public class Result {
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-    private boolean flag; // Two values: true means success, false means not success
+import edu.tcu.cs.hogwartsartifactsonline.artifact.Artifact;
+import edu.tcu.cs.hogwartsartifactsonline.artifact.ArtifactRepository;
+import edu.tcu.cs.hogwartsartifactsonline.wizard.Wizard;
+import edu.tcu.cs.hogwartsartifactsonline.wizard.WizardRepository;
 
-    private Integer code; // Status code. e.g., 200
+@Component
+@Profile("dev")
+public class DBDataInitializer implements CommandLineRunner{
 
-    private String message; // Response message
+    private final ArtifactRepository artifactRepository;
 
-    private Object data; // The response payload
+    private final WizardRepository wizardRepository;
 
-
-    public Result() {
+    public DBDataInitializer(ArtifactRepository artifactRepository, WizardRepository wizardRepository) {
+        this.artifactRepository = artifactRepository;
+        this.wizardRepository = wizardRepository;
     }
 
-    public Result(boolean flag, Integer code, String message) {
-        this.flag = flag;
-        this.code = code;
-        this.message = message;
-    }
+    @Override
+    public void run(String... args) throws Exception {
+        Artifact a1 = new Artifact();
+        a1.setId("1250808601744904191");
+        a1.setName("Deluminator");
+        a1.setDescription("A Deluminator is a device invented by Albus Dumbledore that resembles a cigarette lighter. It is used to remove or absorb (as well as return) the light from any light source to provide cover to the user.");
+        a1.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/deluminator.jpg");
 
-    public Result(boolean flag, Integer code, String message, Object data) {
-        this.flag = flag;
-        this.code = code;
-        this.message = message;
-        this.data = data;
-    }
+        Artifact a2 = new Artifact();
+        a2.setId("1250808601744904192");
+        a2.setName("Invisibility Cloak");
+        a2.setDescription("An invisibility cloak is used to make the wearer invisible.");
+        a2.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/invisibility-cloak.jpg");
 
-    public boolean isFlag() {
-        return flag;
-    }
+        Artifact a3 = new Artifact();
+        a3.setId("1250808601744904193");
+        a3.setName("Elder Wand");
+        a3.setDescription("The Elder Wand, known throughout history as the Deathstick or the Wand of Destiny, is an extremely powerful wand made of elder wood with a core of Thestral tail hair.");
+        a3.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/elder-wand.jpg");
 
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
+        Artifact a4 = new Artifact();
+        a4.setId("1250808601744904194");
+        a4.setName("The Marauder's Map");
+        a4.setDescription("A magical map of Hogwarts created by Remus Lupin, Peter Pettigrew, Sirius Black, and James Potter while they were students at Hogwarts.");
+        a4.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/marauders-map.jpg");
 
-    public Integer getCode() {
-        return code;
-    }
+        Artifact a5 = new Artifact();
+        a5.setId("1250808601744904195");
+        a5.setName("The Sword Of Gryffindor");
+        a5.setDescription("A goblin-made sword adorned with large rubies on the pommel. It was once owned by Godric Gryffindor, one of the medieval founders of Hogwarts.");
+        a5.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/sword-of-gryffindor.jpg");
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
+        Artifact a6 = new Artifact();
+        a6.setId("1250808601744904196");
+        a6.setName("Resurrection Stone");
+        a6.setDescription("The Resurrection Stone allows the holder to bring back deceased loved ones, in a semi-physical form, and communicate with them.");
+        a6.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/resurrection-stone.jpg");
 
-    public String getMessage() {
-        return message;
-    }
+        Wizard w1 = new Wizard();
+        w1.setName("Albus Dumbledore");
+        w1.addArtifact(a1);
+        w1.addArtifact(a3);
+        // Don't manually set the id for the wizard, let the database generate it.
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+        Wizard w2 = new Wizard();
+        w2.setName("Harry Potter");
+        w2.addArtifact(a2);
+        w2.addArtifact(a4);
 
-    public Object getData() {
-        return data;
-    }
+        Wizard w3 = new Wizard();
+        w3.setName("Neville Longbottom");
+        w3.addArtifact(a5);
 
-    public void setData(Object data) {
-        this.data = data;
-    }
+        wizardRepository.save(w1);
+        wizardRepository.save(w2);
+        wizardRepository.save(w3);
 
+        artifactRepository.save(a6);
+    }
 }

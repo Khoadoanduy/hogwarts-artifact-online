@@ -1,29 +1,9 @@
 package edu.tcu.cs.hogwartsartifactsonline.artifact;
 
-import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.ArtifactDto;
-import org.hibernate.ObjectNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-@Service
-@Transactional
-public class ArtifactService {
-
-    private final ArtifactRepository artifactRepository;
-
-    public ArtifactService(ArtifactRepository artifactRepository) {
-        this.artifactRepository = artifactRepository;
-    }
-
-    public Artifact findById(String artifactId) {
-        return this.artifactRepository.findById(artifactId)
-                .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
-    }
-
-    public List<Artifact> findAll() {
-        return this.artifactRepository.findAll();
-    }
+@Repository
+public interface ArtifactRepository extends JpaRepository<Artifact, String>, JpaSpecificationExecutor<Artifact> {
 }
